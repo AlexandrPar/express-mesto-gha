@@ -27,11 +27,11 @@ const getUser = (req, res) => {
       res.status(200).send({ user });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
         return;
       }
-      if (err.name === 'SomeErrorName.') {
+      if (err.name === 'SomeErrorName') {
         res.status(NOT_FOUND).send({ message: `Ошибка ${NOT_FOUND}.` });
         return;
       }
