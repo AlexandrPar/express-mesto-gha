@@ -60,7 +60,7 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(BAD_REQUEST).send({ message: 'Передан несуществующий _id карточки.' });
+        res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
         return;
       }
       res.status(200).send({ card });
@@ -82,7 +82,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(BAD_REQUEST).send({ message: 'Передан несуществующий _id карточки.' });
+        res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
         return;
       }
       res.status(200).send({ card });
