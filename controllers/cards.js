@@ -23,7 +23,7 @@ const createCard = (req, res) => {
     .then((card) => res.status(200).send({ card }))
     .catch((err) => {
       if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: ' Переданы некорректные данные при создании карточки.' });
+        res.status(NOT_FOUND).send({ message: ' Переданы некорректные данные при создании карточки.' });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -63,7 +63,7 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для постановки лайка.' });
+        res.status(NOT_FOUND).send({ message: 'Переданы некорректные данные для постановки лайка.' });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
@@ -85,7 +85,7 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для снятия лайка' });
+        res.status(NOT_FOUND).send({ message: 'Переданы некорректные данные для снятия лайка' });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
