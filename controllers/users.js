@@ -21,7 +21,7 @@ const getUser = (req, res) => {
   User.findById(id)
     .then((user) => {
       if (!user) {
-        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
+        res.status(BAD_REQUEST).send({ message: 'Пользователь по указанному _id не найден.' });
         return;
       }
       res.status(200).send({ user });
@@ -40,8 +40,12 @@ const createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.status(201).send({ user }))
     .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+        return;
+      }
       if (err.name === 'SomeErrorName') {
-        res.status(NOT_FOUND).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -57,14 +61,18 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
+        res.status(BAD_REQUEST).send({ message: 'Пользователь по указанному _id не найден.' });
         return;
       }
       res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'SomeErrorName') {
-        res.status(NOT_FOUND).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
+        return;
+      }
+      if (err.name === 'ValidationError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });

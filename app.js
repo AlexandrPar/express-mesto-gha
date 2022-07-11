@@ -5,6 +5,7 @@ const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 
 const { PORT = 3000 } = process.env;
+const NOT_FOUND = 404;
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use((req, res, next) => {
 
 app.use('/', routerUsers);
 app.use('/', routerCards);
+
+app.use((req, res) => res.status(NOT_FOUND).send({ message: 'Не найдена' }));
 
 app.listen(PORT, '127.0.0.1', () => {
   console.log('Сервер запущен');
