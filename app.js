@@ -27,4 +27,6 @@ app.use((req, res, next) => {
 app.use('/', routerUsers);
 app.use('/', routerCards);
 
-app.listen(PORT, '127.0.0.1');
+app.listen(PORT, '127.0.0.1', () => {
+  console.log('Сервер запущен');
+});
