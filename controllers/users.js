@@ -27,8 +27,12 @@ const getUser = (req, res) => {
       res.status(200).send({ user });
     })
     .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
+        return;
+      }
       if (err.name === 'SomeErrorName.') {
-        res.status(NOT_FOUND).send({ message: 'Ошибка: 404.' });
+        res.status(NOT_FOUND).send({ message: `Ошибка ${NOT_FOUND}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -67,12 +71,12 @@ const updateUser = (req, res) => {
       res.status(200).send({ user });
     })
     .catch((err) => {
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
-        return;
-      }
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+        return;
+      }
+      if (err.name === 'SomeErrorName') {
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -102,7 +106,7 @@ const updateAvatar = (req, res) => {
         return;
       }
       if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });

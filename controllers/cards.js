@@ -44,8 +44,12 @@ const deleteCard = (req, res) => {
       res.status(200).send({ card });
     })
     .catch((err) => {
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
+        return;
+      }
+      if (err.name === 'SomeErrorName') {
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
@@ -66,8 +70,12 @@ const likeCard = (req, res) => {
       res.status(200).send({ card });
     })
     .catch((err) => {
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для постановки лайка.' });
+        return;
+      }
+      if (err.name === 'SomeErrorName') {
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
@@ -88,8 +96,12 @@ const dislikeCard = (req, res) => {
       res.status(200).send({ card });
     })
     .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для снятия лайка.' });
+        return;
+      }
       if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для снятия лайка' });
+        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
