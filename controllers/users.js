@@ -6,14 +6,8 @@ const SERVER_ERROR = 500;
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send({ users }))
-    .catch((err) => {
-      if (err.name === 'SomeErrorName') {
-        res.status(NOT_FOUND).send({ message: 'Ошибка отображения пользователей.' });
-        return;
-      }
-      res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
-    });
+    .then((users) => res.send({ users }))
+    .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' }));
 };
 
 const getUser = (req, res) => {
@@ -31,10 +25,6 @@ const getUser = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
         return;
       }
-      if (err.name === 'SomeErrorName') {
-        res.status(NOT_FOUND).send({ message: `Ошибка ${NOT_FOUND}.` });
-        return;
-      }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
     });
 };
@@ -46,10 +36,6 @@ const createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании пользователя.' });
-        return;
-      }
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -75,7 +61,7 @@ const updateUser = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
         return;
       }
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
@@ -86,7 +72,7 @@ const updateUser = (req, res) => {
 const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   if (!avatar) {
-    res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+    res.status(BAD_REQUEST).send({ message: 'Аватар пользователя не найден.' });
   }
   User.findByIdAndUpdate(
     req.user._id,
@@ -105,7 +91,7 @@ const updateAvatar = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
         return;
       }
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }

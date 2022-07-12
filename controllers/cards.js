@@ -7,27 +7,17 @@ const SERVER_ERROR = 500;
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.status(200).send({ cards }))
-    .catch((err) => {
-      if (err.name === 'SomeErrorName') {
-        res.status(NOT_FOUND).send({ message: 'Ошибка получения карточек.' });
-        return;
-      }
-      res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
-    });
+    .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' }));
 };
 
 const createCard = (req, res) => {
   const ownerCard = req.user._id;
   const { name, link } = req.body;
   Card.create({ name, link, owner: ownerCard })
-    .then((card) => res.status(200).send({ card }))
+    .then((card) => res.status(201).send({ card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: ' Переданы некорректные данные при создании карточки.' });
-        return;
-      }
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по-умолчанию.' });
@@ -46,10 +36,6 @@ const deleteCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные.' });
-        return;
-      }
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
@@ -74,10 +60,6 @@ const likeCard = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для постановки лайка.' });
         return;
       }
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
-        return;
-      }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
     });
 };
@@ -98,10 +80,6 @@ const dislikeCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные для снятия лайка.' });
-        return;
-      }
-      if (err.name === 'SomeErrorName') {
-        res.status(BAD_REQUEST).send({ message: `Ошибка ${BAD_REQUEST}.` });
         return;
       }
       res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
