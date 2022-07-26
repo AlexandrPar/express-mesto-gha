@@ -71,14 +71,16 @@ const dislikeCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         next(new NotFoundError('Передан несуществующий _id карточки.'));
+        return;
       }
-      return res.status(200).send({ card });
+      res.status(200).send({ card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные для снятия лайка.'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 

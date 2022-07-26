@@ -24,6 +24,8 @@ app.use('/', roterAutoriz);
 app.use('/', routerUsers);
 app.use('/', routerCards);
 app.use(errors());
+
+app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 app.use((err, req, res, next) => {
   if (err.statusCode && err.statusCode !== 500) {
     res.status(err.statusCode).send({ message: err.message });
@@ -32,8 +34,6 @@ app.use((err, req, res, next) => {
   }
   next(err);
 });
-
-app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
 app.listen(PORT, '127.0.0.1', () => {
   console.log('Сервер запущен');
