@@ -45,10 +45,13 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         next(new CreateError('Этот email уже занят'));
+        return;
       }
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Некорректные данные для создания пользователя'));
-      } else next(err);
+        return;
+      }
+      next(err);
     });
 };
 

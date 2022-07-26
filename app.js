@@ -24,6 +24,14 @@ app.use('/', roterAutoriz);
 app.use('/', routerUsers);
 app.use('/', routerCards);
 app.use(errors());
+app.use((err, req, res, next) => {
+  if (err.statusCode && err.statusCode !== 500) {
+    res.status(err.statusCode).send({ message: err.message });
+  } else {
+    res.status(500).send({ message: 'Что-то пошло не так' });
+  }
+  next(err);
+});
 
 app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
