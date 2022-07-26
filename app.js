@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
@@ -22,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use('/', roterAutoriz);
 app.use('/', routerUsers);
 app.use('/', routerCards);
+app.use(errors());
 
 app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
